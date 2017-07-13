@@ -1,0 +1,370 @@
+    html {
+        font-size: 62.5%;
+        width: 100%;
+        height: 100%;
+    }
+    .containner {
+        position: absolute;
+        display: block;
+        width:60%;
+        height: 85%;
+        top: 50%;
+        left: 40%;
+        opacity: 0.8;
+        transform: translate(-50%, -50%);
+        /*背景色渐变处理*/
+        /*IE8*/
+        filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=red,endcolorstr=blue,gradientType=0);
+        -ms-filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=red,endcolorstr=blue,gradientType=0);
+        /* 一些不支持背景渐变的浏览器 */
+        background:red;
+        /*火狐*/
+        background:-moz-linear-gradient(top, red, rgba(0, 0, 255, 0.5));
+        /*chrome*/
+        background:-webkit-gradient(linear, 0 0, 0 bottom, from(black), to(gray));
+        /*oprea*/
+        background:-o-linear-gradient(top, red, rgba(0, 0, 255, 0.5));
+    }
+    .frass {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: inherit;
+        -webkit-filter: blur(10px);
+        -moz-filter: blur(10px);
+        -ms-filter: blur(10px);
+        -o-filter: blur(10px);
+        filter: blur(10px);
+        /*filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=false);*/
+    }
+
+    .music-content {
+        position: relative;
+        display: block;
+        text-align: center;
+        width: 100%;
+        height: 75%;
+        top: 0px;
+        color: white;
+        /*outline: 1px solid red;*/
+    }
+
+    .cut-ofRule {
+        position: relative;
+        top: 0%;
+        width: 100%;
+        height: 13%;
+        background-color: #504845;
+        border-bottom: 3px solid rgba(255, 0, 0, 0.32);;
+        font-size: 30px;
+        text-align: left;
+        color: white;
+    }
+    .reserch {
+        position: absolute;
+        width: 30%;
+        height: 60%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 1px solid black;
+        border-radius: 7%;
+        background-color: white;
+        outline: none;
+    }
+    .go-button {
+        position: absolute;
+        width: 4%;
+        height: 60%;
+        top: 50%;
+        left: 63%;
+        color: black;
+        text-align: center;
+        transform: translate(-50%, -50%);
+        border: 1px solid rgb(164, 148, 133);
+        border-radius: 7%;
+        background-color: rgb(164, 148, 133);
+        font-size: large;
+    }
+    .currentMusic {
+        position: relative;
+        display: block;
+        width: 30%;
+        height: 5%;
+        top: 13%;
+        left: 45%;
+        color: white;
+        font-style: normal;;
+        font-size: large;
+        /*outline: 1px solid white;*/
+    }
+    .currentImgDiv {
+        position: absolute;
+        display: block;
+        overflow: hidden;
+        top: 55%;
+        left: 23%;
+        width: 25%;
+        height: 50%;
+        border-radius: 100%;
+        text-align: center;
+        transform: translate(-50%, -50%);
+        border: 25px solid rgb(20, 44, 64);
+    }
+
+    .currentImg {
+        width: 100%;
+        height:100%;
+        /*控制图片在框内的位置*/
+        /*上、左、 下、右*/
+        margin: -0px -0px -0px -2px;
+    }
+    .music-collectLoad {
+        position:absolute;
+        left: 50%;
+        bottom: 3%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-around;
+        width: 50%;
+        height: 5%;
+        /*outline: 2px solid red;*/
+    }
+    .join {
+        display: inline-block;
+        width: 5%;
+        height: 80%;
+    }
+    .controls {
+            position: absolute;;
+            display: block;
+            width: 50%;
+            height: 20%;
+            bottom: 0%;
+            /*background-color: rgba(128, 128, 128, 0.31);*/
+            /*outline:5px solid blue;*/
+    }
+    .music-control {
+        position: relative;
+        top: 20%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-around;
+        width: 100%;
+        height: 20%;
+        /*outline:2px solid purple;*/
+    }
+    .play-mode {
+        width: 27px;
+        height: 27px;
+    }
+    .mode {
+        display: none;
+        width:27px;
+        height: 27px;
+    }
+    .mode-active {
+        display: inline-block;
+    }
+    .play {
+        display: inline-block;
+        width:32px;
+        height: 32px;
+    }
+    .play-prev {
+        background: url(image/上一曲.png);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+    .play-prev:hover {
+        background: url(image/上一曲1.png);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+    .play-next {
+        background: url(image/下一曲.png);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+    .play-next:hover {
+        background: url(image/下一曲1.png);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+    .play-pause {
+        display: inline-block;
+        background: url(image/暂停.png);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        width:32px;
+        height: 32px;
+    }
+    .play-pause:hover {
+        background: url(image/暂停1.png);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+    .list-button {
+        display: inline-block;
+        width:27px;
+        height: 27px;
+        background: url(image/列表.png);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        /*outline: 2px solid blue;*/
+    }
+    .list-button:hover {
+        background: url(image/列表1.png);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+    .audio {
+        position: absolute;
+        display: block;
+        top:50px;
+        width:95%;
+        height: 20px;
+        border: 2px solid olivedrab;
+        border-radius: 14px;
+    }
+
+    .listContainner {
+        position: absolute;
+        display: none;
+        opacity: 0.8;
+        width: 40%;
+        height: 80%;
+        padding: 0px;
+        margin: 0px;
+        right: 0px;
+        top: 8%;
+        color: white;
+        background-color: #1f1c1c;
+        /*outline: 2px solid white;*/
+        /*rgba(158, 158, 158, 0.66)*/
+    }
+    .head {
+        position: relative;
+        font-size: 2.5em;
+        width: 100%;
+        height: 10%;
+        top: 0px;
+        left: 0px;
+        margin: 0px;
+        text-align: center;
+    }
+    .ul-song {
+        position: relative;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 90%;
+        font-size: 1.5em;
+        padding: 0px;
+        margin: 0px;
+        list-style: none;
+    }
+    .li-song {
+        margin-bottom: 1px;
+        line-height: 230%;
+        text-shadow: 1px 1px 2px #FF0000;
+        /*background-color: black;*/
+    }
+    .li-song:hover {
+        /*color: red;*/
+        font-size: 1.1em;
+        background-color: black;
+    }
+    .slider-container {
+        position: absolute;
+        display: inline-block;
+        height: 10%;
+        width: 100%;
+        bottom: 25%;
+        /*outline: 2px solid blue;*/
+    }
+    .invisibleSlider {
+        position: absolute;
+        display: inline-block;
+        top: 50%;
+        width: 75%;
+        height: 10%;
+        left: 12%;
+        opacity: 0;
+        margin: 0px;
+        z-index: 2;
+    }
+    .visible-containner {
+        position: absolute;
+        display: inline-block;
+        top: 50%;
+        width: 75%;
+        height: 30%;
+        left: 12%;
+        transform: translateY(-50%);
+        /*outline: 3px solid purple;*/
+    }
+
+     .visibleSlider {
+         position: absolute;
+         display: inline-block;
+         top: 50%;
+         width: 100%;
+         height: 100%;
+         left: 0%;
+         background-color: #c1baba;
+         border-radius: 15px;
+         transform: translateY(-50%);
+         /*outline: 1px solid red;*/
+    }
+    .line {
+        position: absolute;
+        display: inline-block;
+        height: 100%;
+        background-color: red;
+    }
+    .outsideCircle {
+        position: absolute;
+        display: inline-block;
+        top: 50%;
+        width: 4px;
+        height: 4px;
+        border-radius: 40px;
+        background-color: red;
+        transform: translateY(-50%);
+        z-index: 1;
+    }
+    .indexCircle {
+        position: absolute;
+        display: inline-block;
+        width: 3px;
+        height: 3px;
+        border: 4px solid white;
+        border-radius: 40px;
+        background-color: red;
+        transform: translateY(-42%);
+        z-index: 1;
+    }
+    .currentTime {
+        position: absolute;
+        display: inline-block;
+        top: 50%;
+        width: 6%;
+        left: 4%;
+        color: white;
+        font-size: 1%;
+        transform: translateY(-60%);
+    }
+    .duration {
+        position: absolute;
+        display: inline-block;
+        top: 50%;
+        width: 6%;
+        right: 5%;
+        color: white;
+        font-size: 1%;
+        transform: translateY(-50%);
+        /*outline: 1px solid red;*/
+    }

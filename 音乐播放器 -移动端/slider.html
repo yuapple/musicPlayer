@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>slider</title>
+        <style>
+            .slider-container {
+                position: absolute;
+                display: block;
+                width: 500px;
+                top: 100px;
+                left: 100px;
+                /*outline: 1px solid red;*/
+            }
+            .invisibleSlider {
+                position: relative;
+                left: 0px;
+                display: block;
+                width: 100%;
+                background-color: red;
+                opacity: 0;
+                z-index: 1;
+            }
+            .visibleSlider {
+                position: absolute;
+                display: block;
+                top: 10px;
+                left: 0px;
+                height: 1px;
+                width: 100%;
+                background-color: red;
+                z-index: -1;
+            }
+            .line {
+                position: absolute;
+                display: inline-block;
+                height: 400%;
+                background-color: black;
+                z-index: 0;
+            }
+            .indexCircle {
+                position: absolute;
+                display: inline-block;
+                width: 10px;
+                height: 20px;
+                border: 1px solid black;
+                border-radius: 10px;
+                background-color: pink;
+                transform: translateY(-50%);
+                z-index: 0;
+            }
+        </style>
+        <script src="jquery.min.js"></script>
+    </head>
+    <body>
+        <div class="slider-container">
+            <input class="invisibleSlider" step=0.01 type="range" value="0" max="1000" min="0">
+            <div class="visibleSlider">
+                <div class="line">
+
+                </div>
+                <div class="indexCircle">
+
+                </div>
+            </div>
+        </div>
+        <script>
+            // 滑条
+            $('.invisibleSlider').on('input', function(event) {
+                var target = $(event.target)
+                // width: 500px;
+                // targetWidth = '500px'
+                var targetWidth = target.css('width')
+                var targetLength = Number(targetWidth.slice(0, targetWidth.length - 2))
+                var max = target.attr('max')
+                var currentValue = target.val()
+                var ratio = currentValue / max
+                var lineWidth = targetLength * ratio
+                console.log('lineWidth', lineWidth);
+                $('.line').css('width', lineWidth)
+                $('.indexCircle').css('left', `${lineWidth - 5}px`)
+            })
+        </script>
+    </body>
+</html>
