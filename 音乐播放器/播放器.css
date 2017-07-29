@@ -100,17 +100,52 @@
         font-size: large;
         /*outline: 1px solid white;*/
     }
+
+    @keyframes rotate {
+      0% {
+        transform:rotate(0deg);
+      }
+      100% {
+        transform:rotate(360deg);
+      }
+    }
+    @-webkit-keyframes rotate {
+        0% {
+          transform:rotate(0deg);
+        }
+        100% {
+          transform:rotate(360deg);
+        }
+      }
+    @-moz-keyframes rotate {
+        0% {
+          transform:rotate(0deg);
+        }
+        100% {
+          transform:rotate(360deg);
+        }
+      }
+
+      @-webkit-keyframes rotateone {
+          0% {
+            transform:rotate(0deg);
+          }
+        }
+        @keyframes rotateone {
+            0% {
+              transform:rotate(0deg);
+            }
+          }
     .currentImgDiv {
-        position: absolute;
+        position: relative;
         display: block;
         overflow: hidden;
-        top: 55%;
-        left: 23%;
         width: 25%;
         height: 50%;
+        top: 5%;
+        left: 5%;
         border-radius: 100%;
         text-align: center;
-        transform: translate(-50%, -50%);
         border: 25px solid rgb(20, 44, 64);
     }
 
@@ -239,7 +274,7 @@
         padding: 0px;
         margin: 0px;
         right: 0px;
-        top: 8%;
+        top: 11%;
         color: white;
         background-color: #1f1c1c;
         /*outline: 2px solid white;*/
@@ -269,7 +304,8 @@
     .li-song {
         margin-bottom: 1px;
         line-height: 230%;
-        text-shadow: 1px 1px 2px #FF0000;
+        text-shadow: 1px 1px 2px rgba(255, 0, 0, 0.59);
+        margin-left: 10%;
         /*background-color: black;*/
     }
     .li-song:hover {

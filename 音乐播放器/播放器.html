@@ -80,14 +80,20 @@
                 $('.play-next').on('click', function() {
                     play(1)
                     $('.audio')[0].play()
-                    isPaused()
+                    switchPlayPicture()
+                    // 点击上一曲时，先取消动画效果
+                    cancelRotate()
                 })
+
                 // 上一曲
                 $('.play-prev').on('click', function() {
                     play(-1)
                     $('.audio')[0].play()
-                    isPaused()
+                    switchPlayPicture()
+                    // 点击上一曲时，先取消动画效果
+                    cancelRotate()
                 })
+
                 // 播放与暂停播放
                 $('.play-pause').on('click', function() {
                     var isPaused = $('.audio').prop('paused')
@@ -95,9 +101,13 @@
                     if (isPaused === true) {
                         $('.audio')[0].play()
                         $('.play-pause').css('background-image', 'url(image/播放.png)')
+                        // 歌曲播放时，图片开始旋转
+                        addRotate()
                     } else {
                         $('.audio')[0].pause()
                         $('.play-pause').css('background-image', 'url(image/暂停.png)')
+                        // 设置动画暂停
+                        $('.currentImgDiv').css('animation-play-state','paused')
                     }
                 })
             }
@@ -114,21 +124,21 @@
             // 歌曲播放结束以后，要做两件事，按照当前模式下播放歌曲，再将更改当前播放歌曲的名称
             var bindAudioEnded = function() {
                 $('.audio').on('ended', function() {
-                        playMode(mode)
+                    playMode(mode)
                 })
             }
 
             // 播放列表添加click事件，点击播放列表图标，实现播放列表的打开和关闭
             var bindListClick = function() {
                 $('.list-button').on('click', function() {
-                    console.log('222');
+                    // console.log('222');
                     var display = $('.listContainner').css('display')
-                    console.log('display', display);
+                    // console.log('display', display);
                     if (display === 'none') {
                         $('.listContainner').css('display', 'block')
-                        console.log('2', $('.listContainner').css('display'));
+                        // console.log('2', $('.listContainner').css('display'));
                     } else {
-                        console.log('000');
+                        // console.log('000');
                         $('.listContainner').css('display', 'none')
                     }
                 })
@@ -141,13 +151,16 @@
                     console.log('target', target);
                     if (target.hasClass('li-song')) {
                         var index = target.data('index')
-                        console.log('index', index);
+                        console.log('indexlist', index);
                         $('audio').attr('src',`music/${musicList[index]}`)
-                        $('audio').attr('data-index', index)
                         $('audio')[0].play()
+                        $('audio').attr('data-index', index)
                         $('.play-pause').css('background-image', 'url(image/播放.png)')
+                        // 更改播放歌曲名称
+                        switchNameOfMusic(index)
+                        //首先取消动画效果，canplay状态下添加动画
+                        cancelRotate()
                     }
-
                 })
             }
 
@@ -163,6 +176,12 @@
                     `
                     console.log('d', d);
                     $('.duration').text(d)
+
+                    // 判断当前的播放状态，如果是播放状态下，添加动画效果。
+                    var isPaused = $('.audio').prop('paused')
+                    if (isPaused === false) {
+                      addRotate()
+                    }
                 })
             }
 
@@ -263,17 +282,22 @@
                     $('audio').attr('src', `music/${musicList[i]}`)
 
                     //当点击上下曲时，class为music-content的元素text设当前歌曲名字
-                    var ms = musicList[i].slice(0,
-                        musicList[i].length - 4)
-                    console.log('ms', ms);
-                    var m = `
-                        ${ms}
-                    `
-                    $('.currentMusic').text(m)
+                    switchNameOfMusic(i)
+            }
+
+            // 点击歌曲播放列表里面的歌曲，切换页面歌曲名称为当前歌曲名称
+            var switchNameOfMusic = function(i) {
+              //当点击上下曲时，class为music-content的元素text设当前歌曲名字
+              var ms = musicList[i].slice(0, musicList[i].length - 4)
+              console.log('ms', ms);
+              var m = `
+                  ${ms}
+              `
+              $('.currentMusic').text(m)
             }
 
             // 判断当前的播放状态，如果是播放状态，将状态图标改为播放
-            var isPaused = function() {
+            var switchPlayPicture = function() {
                 var isPaused = $('.audio').prop('paused')
                 // console.log('isPaused', $('.audio').prop('paused'));
                 if (isPaused === false) {
@@ -304,7 +328,7 @@
                 } else if (repeatActive === true) {
                     mode = 2
                 }
-                console.log('mode', mode);
+                // console.log('mode', mode);
             }
 
             // 各播放模式下执行的函数
@@ -312,13 +336,27 @@
                 if (m === 0) {
                     play(1)
                     $('.audio')[0].play()
+                    //首先取消动画效果，canplay状态下添加动画
+                    cancelRotate()
                 } else if (m === 1) {
                     random()
                     $('.audio')[0].play()
+                    var srcOfAudio = $('.audio').attr('src')
+                    // console.log('srcOfAudio', srcOfAudio);
+                    var lengthOfValue = srcOfAudio.length
+                    var ms = srcOfAudio.slice(6,length-4)
+                    // console.log('ms', ms);
+                    var m = `
+                        ${ms}
+                    `
+                    $('.currentMusic').text(m)
+                    //首先取消动画效果，canplay状态下添加动画
+                    cancelRotate()
                 } else {
                     single()
-                    console.log('yuyuyuu');
                     $('.audio')[0].play()
+                    //首先取消动画效果，canplay状态下添加动画
+                    cancelRotate()
                 }
             }
 
@@ -355,7 +393,7 @@
                 //1、 music-content元素的text为当前歌曲名字
                 var index = $('.audio').data('index')
                 var mss  = musicList[index].slice(0, musicList[index].length - 4)
-                console.log('ms', mss);
+                // console.log('ms', mss);
                 var m = `
                     ${mss}
                 `
@@ -376,6 +414,18 @@
                     `
                     $('.ul-song').append(t)
                 }
+            }
+
+            // 增加CSS中的animation属性
+            var addRotate = function() {
+              $('.currentImgDiv').css('animation','rotate 13s linear infinite')
+              $('.currentImgDiv').css('-webkit-animation','rotate 13s linear infinite')
+              $('.currentImgDiv').css('-moz-animation','rotate 13s linear nfinite')
+            }
+            var cancelRotate = function() {
+              $('.currentImgDiv').css('animation','none')
+              $('.currentImgDiv').css('-webkit-animation','none')
+              $('.currentImgDiv').css('-moz-animation','none')
             }
 
             var __main = function() {
