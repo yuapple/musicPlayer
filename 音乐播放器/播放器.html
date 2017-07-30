@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="播放器.css" type="text/css"/>
         <script src="jquery.min.js">
         </script>
+        <script src=lrc.js></script>
     </head>
     <body>
         <div class="containner">
@@ -20,13 +21,16 @@
                 <div class="currentMusic">
 
                 </div>
+                <div class="song-words">
+
+                </div>
                 <div class="currentImgDiv">
                     <img class="currentImg" src="image/suxing.jpg" alt="" />
                 </div>
             </div>
             <div class="music-collectLoad">
                 <img class="join collect" src="image/收藏.png" alt="" />
-                <img class="ioin download" src="image/下载.png" alt="" />
+                <img class="join download" src="image/下载.png" alt="" />
                 <img class="join omments" src="image/评论.png" alt="" />
                 <img class="join skinchange" src="image/换肤.png" alt="" />
             </div>
@@ -69,12 +73,20 @@
             </div>
         </div>
             <script>
-            var musicList = ['Kara - 不懂不懂.mp3', '蔡健雅 - 下一次爱情来的时候.mp3', '白雅言 - 爱情学概论.mp3', '苏醒 - 晚安亲爱的.mp3', '蔡依林 - 小伤口.mp3', '曾静玟 - 不快乐.mp3']
+            // console.log('tanya', tanya)
+            var musicList = ['Kara - 不懂不懂.mp3', '蔡健雅 - 被驯服的象.mp3', '白雅言 - 爱情学概论.mp3', '苏醒 - 晚安亲爱的.mp3', '蔡依林 - 小伤口.mp3', '曾静玟 - 不快乐.mp3']
             var imagesList = ['kara.jpg', 'tanya.jpg', 'yayan.jpg', 'suxing.jpg', 'jolin.jpg', 'jywen.jpg']
+            var skinList = [['black', 'rgb(20, 44, 64)'], ['gray', '#1b1919'], ['rgb(20, 44, 64)', 'gray'], ['rgb(230, 125, 170)', '#ce87a6']]
+            // 默认歌曲播放图片
             $('.currentImg').attr('src', `image/${imagesList[0]}`)
+            // 默认歌曲
             $('.audio').attr('src', `music/${musicList[0]}`)
+            // audio默认index
             $('.audio').attr('data-index', 0)
+            // 换肤默认index
+            $('.skinchange').attr('data-index', 0)
             var mode = 0
+
 
             // 下一曲、上一曲、暂停
             var bindPlayClick = function() {
@@ -220,9 +232,32 @@
             }
 
             // 歌曲播放时，实时更新歌曲的播放进度，并进度条的进度与歌曲播放进度一致。
+            var msconds = Object.keys(hmAndGeCi).map(function(e){
+              console.log(e)
+              return Number(e)
+            })
+            var songWordsContainer = $('.song-words')
+            console.log('msconds', msconds)
             var bindTimeUpdate =function() {
                 $('.audio').on('timeupdate', function() {
                     var updatetime = $('.audio')[0].currentTime
+                    var msUpdateTime = updatetime * 1000 + 300
+                      console.log('updatetime', updatetime * 1000)
+                      var status = false
+                      var nowWords
+                      // console.log(hmAndGeCi[updatetime * 1000])
+                      for (var i = 0; i < msconds.length; i++) {
+                        // console.log('u', hmAndGeCi[msconds[i]])
+                        if (msconds[i] < msUpdateTime) {
+                          status = true
+                          nowWords = hmAndGeCi[msconds[i]]
+                          // break
+                        }
+                      }
+                      if (status) {
+                        console.log('ts', nowWords)
+                        songWordsContainer.text(nowWords)
+                      }
                     // 播放歌曲的当前时长
                     var transCurrentTime = formatTime(updatetime)
                     var c = `
@@ -252,7 +287,21 @@
                     }
                 })
             }
-
+            var bindskinClick = function() {
+              // 给换肤标志添加click事件
+              $('.skinchange').on('click', function() {
+              var lengthOfskinList = skinList.length
+              // 得到当前皮肤的index
+              var index = $('.skinchange').data('index')
+              // 点击一次换肤标志，index在原来的基础上面加1,
+              var i = (index + 1 + lengthOfskinList) % lengthOfskinList
+              // 更改皮肤，
+              $('.containner').css('background',`-moz-radial-gradient(circle farthest-side, ${skinList[i][0]}, ${skinList[i][1]})`)
+              $('.containner').css('background',`-webkit-radial-gradient(circle farthest-side, ${skinList[i][0]}, ${skinList[i][1]}`)
+              // 设置当前皮肤的index为i
+              $('.skinchange').data('index', i)
+              })
+            }
 
             var bindEvents = function() {
                 // 上一曲、下一曲、暂停click事件
@@ -273,6 +322,8 @@
                 bindTimeUpdate()
                 // 当点击播放列表以外的部分，关闭歌曲列表
                 bindlistoff()
+                // 切换播放器皮肤
+                bindskinClick()
             }
 
             // 给play绑定click事件,同时将播放页面的歌曲名称改为当前播放歌曲
