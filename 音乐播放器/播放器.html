@@ -21,7 +21,7 @@
 
                 </div>
                 <div class="currentImgDiv">
-                    <img class="currentImg" src="image/jywen.jpg" alt="" />
+                    <img class="currentImg" src="image/suxing.jpg" alt="" />
                 </div>
             </div>
             <div class="music-collectLoad">
@@ -70,6 +70,8 @@
         </div>
             <script>
             var musicList = ['Kara - 不懂不懂.mp3', '蔡健雅 - 下一次爱情来的时候.mp3', '白雅言 - 爱情学概论.mp3', '苏醒 - 晚安亲爱的.mp3', '蔡依林 - 小伤口.mp3', '曾静玟 - 不快乐.mp3']
+            var imagesList = ['kara.jpg', 'tanya.jpg', 'yayan.jpg', 'suxing.jpg', 'jolin.jpg', 'jywen.jpg']
+            $('.currentImg').attr('src', `image/${imagesList[0]}`)
             $('.audio').attr('src', `music/${musicList[0]}`)
             $('.audio').attr('data-index', 0)
             var mode = 0
@@ -155,6 +157,9 @@
                         $('audio').attr('src',`music/${musicList[index]}`)
                         $('audio')[0].play()
                         $('audio').attr('data-index', index)
+                        // 改变当前播放歌曲的图片
+                        $('.currentImg').attr('src', `image/${imagesList[index]}`)
+                        // 改变播放按钮为播放状态
                         $('.play-pause').css('background-image', 'url(image/播放.png)')
                         // 更改播放歌曲名称
                         switchNameOfMusic(index)
@@ -280,6 +285,8 @@
                     // 将i的值赋值给index，data-index="i"
                     $('.audio').data('index', i)
                     $('audio').attr('src', `music/${musicList[i]}`)
+                    // 切换当前播放的图片
+                    $('.currentImg').attr('src', `image/${imagesList[i]}`)
 
                     //当点击上下曲时，class为music-content的元素text设当前歌曲名字
                     switchNameOfMusic(i)
@@ -341,15 +348,19 @@
                 } else if (m === 1) {
                     random()
                     $('.audio')[0].play()
+                    // 找到当前播放歌曲路径，截取其中的歌名部分，
                     var srcOfAudio = $('.audio').attr('src')
                     // console.log('srcOfAudio', srcOfAudio);
                     var lengthOfValue = srcOfAudio.length
                     var ms = srcOfAudio.slice(6,length-4)
                     // console.log('ms', ms);
+                    // 将截取的歌名部分设置为当前播放歌名
                     var m = `
                         ${ms}
                     `
                     $('.currentMusic').text(m)
+                    // 切换当前播放的图片为对应的歌手
+
                     //首先取消动画效果，canplay状态下添加动画
                     cancelRotate()
                 } else {
@@ -372,6 +383,7 @@
                 var r = Math.floor(Math.random() * musicList.length)
                 $('.audio').attr('src', `music/${musicList[r]}`)
                 $('.audio').attr('data-index', r)
+                $('.currentImg').attr('src', `image/${imagesList[r]}`)
             }
 
             //格式化时间,将时间格式转化为 分 ：秒
