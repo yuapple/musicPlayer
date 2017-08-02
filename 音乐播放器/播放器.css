@@ -45,23 +45,44 @@
         display: block;
         text-align: center;
         width: 100%;
-        height: 75%;
+        height: 80%;
         top: 0px;
         color: white;
         /*outline: 1px solid red;*/
     }
 
-    .song-words {
+    .currentMusic {
+        position: relative;
+        display: block;
+        width: 30%;
+        height: 5%;
+        top: 7%;
+        left: 55%;
+        color: white;
+        font-style: normal;;
+        font-size: large;
+      /*outline: 1px solid white;*/
+    }
+    .lrc-containner {
       position: absolute;
-      top: 50%;
-      right: 10%;
-      width: 200px;
-      height: 30px;
+      top: 35%;
+      left: 55%;
+      width: 35%;
+      height: 65%;
       font-size: 20px;
       line-height: 30px;
-      background: pink;
+      overflow: hidden;
+      outline: 2px solid pink;
     }
-
+    .song-words-list {
+      position: absolute;
+      text-align: center;
+      padding-left: 0;
+      top: 50%;
+      font-size: 14px;
+      list-style-type: none;
+      transition: all 0.5s linear;
+    }
     .cut-ofRule {
         position: relative;
         top: 0%;
@@ -98,18 +119,7 @@
         background-color: rgb(164, 148, 133);
         font-size: large;
     }
-    .currentMusic {
-        position: relative;
-        display: block;
-        width: 30%;
-        height: 5%;
-        top: 13%;
-        left: 45%;
-        color: white;
-        font-style: normal;;
-        font-size: large;
-        /*outline: 1px solid white;*/
-    }
+
 
     @keyframes rotate {
       0% {
