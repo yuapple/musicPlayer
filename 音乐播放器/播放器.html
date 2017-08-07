@@ -84,38 +84,10 @@
             // 默认歌曲
             $('.audio').attr('src', `music/${musicList[0]}`)
             // audio默认index
-            $('.audio').attr('data-index', 0)
+            $('.audio').data('index', 0)
             // 换肤默认index
-            $('.skinchange').attr('data-index', 0)
+            $('.skinchange').data('index', 0)
             var mode = 0
-            var msconds = Object.keys(hmAndGeCi).map(function(e){
-              // console.log(e)
-              return Number(e)
-            })
-
-            var test = function() {
-              // hmAndGeCi为key为时间（毫秒），value为对应的歌词的对象
-              // 用Object.keys方法得到对象的keys,并将其转换为数字
-              // var msconds = Object.keys(hmAndGeCi).map(function(e){
-                // console.log(e)
-                // return Number(e)
-              // })
-              // 获取存放歌词的元素
-              var lrcContainer = $('.song-words-list')
-              // 定义一个空字符串用以存放歌词
-              var res = ''
-              for (var i = 0; i < msconds.length; i++) {
-                // 遍历添加歌词到tres中
-                  res += `<li class="li-song-word">${hmAndGeCi[msconds[i]]}</li>`
-              }
-              // console.log('res', res)
-              lrcContainer.append(res)
-              //得到一个有由每句歌词组成的数组
-              var words = $('.li-song-word')
-              console.log('word', words);
-              return words
-            }
-            // test()
 
             // 下一曲、上一曲、暂停
             var bindPlayClick = function() {
@@ -194,10 +166,13 @@
                     console.log('target', target);
                     if (target.hasClass('li-song')) {
                         var index = target.data('index')
-                        console.log('indexlist', index);
-                        $('audio').attr('src',`music/${musicList[index]}`)
-                        $('audio')[0].play()
-                        $('audio').attr('data-index', index)
+                        // console.log('indexlist', index);
+                        $('.audio').attr('src',`music/${musicList[index]}`)
+                        // 自动播放当前歌曲
+                        $('.audio')[0].play()
+                        // 设置当前播放歌曲的index为被点击歌曲的index
+                        $('.audio').data('index', index)
+                        // console.log('e', $('.audio').data("index"));
                         // 改变当前播放歌曲的图片
                         $('.currentImg').attr('src', `image/${imagesList[index]}`)
                         // 改变播放按钮为播放状态
@@ -206,6 +181,9 @@
                         switchNameOfMusic(index)
                         //首先取消动画效果，canplay状态下添加动画
                         cancelRotate()
+                        // 切换歌曲之前，先把上一首歌的歌词清除
+                        $('.song-words-list').text('')
+                        // console.log('ttt', $('.song-words-list').text());
                     }
                 })
             }
@@ -213,8 +191,11 @@
             // 加载音频完成可以播放后触发的canplay事件
             var bindEAudioCanplay = function() {
                 $('.audio').on('canplay', function() {
+                    var musicName = $('.audio').attr('src').slice(6)
+                    console.log('musicName', musicName);
+                    addMusicLrc(musicName)
                     var audio = $('.audio')[0]
-                    var words = test()
+                    var words = addMusicLrc(musicName)
                     // 将Words赋值给audio的words
                     audio.words = words
                     // console.log('words', words)
@@ -274,13 +255,14 @@
             }
 
 
-            //  console.log('msconds', msconds)
-
+            // 分别设置上一次更新和当前更新的index为0
             var oldIndex = 0
             var nowIndex = 0
             // 歌曲播放时，实时更新歌曲的播放进度，并进度条的进度与歌曲播放进度一致。
             var bindTimeUpdate = function() {
                 $('.audio').on('timeupdate', function() {
+                    // var index = $('.audio').data("index")
+                    var musicName = $('.audio').attr('src').slice(6)
                     var updatetime = $('.audio')[0].currentTime
                     var words = $('.audio')[0].words
                     // 将实时更新的时间 转换成毫秒，用于和歌词时间进行比较
@@ -289,23 +271,26 @@
                     var status = false
                     // 定义一个变量用以存放歌曲当前的歌词
                     var nowWords
+                    // 歌词更新时，把当前的index赋值给oldindex
                     oldIndex = nowIndex
-                      // console.log(hmAndGeCi[updatetime * 1000])
+                    // 根据当前播放歌曲的歌名来找到歌词的对象，得到时间的数组
+                    var hmArray = hmAndGeCiTransferHm(musicName)
                       // 循环遍历每一段歌词更新的时间组成的数组
-                    for (var i = 0; i < msconds.length; i++) {
-                      // console.log('u', hmAndGeCi[msconds[i]])
+                    for (var i = 0; i < hmArray.length; i++) {
+                      // console.log('u', hmAndGeCi[hm[i]])
                       // 当歌词中的更新时间小于播放器更新的时间时，表示刚好播放到该句歌词
-                      if (msconds[i] < msUpdateTime) {
+                      if (hmArray[i] < msUpdateTime) {
                         status = true
                         // 当前播放的歌词
-                        nowWords = hmAndGeCi[msconds[i]]
+                        nowWords = hmAndGeCi[hmArray[i]]
+                        // 将i赋值给nowindex，即反映出当前歌词第几次更新
                         nowIndex = i
                         // 当歌曲的时间小于歌词出现的时间时
                       } else {
                         // 改变所有的列表中的元素为费播放状态下的样式
                         $(words).css({
-                          'font-size': '14px',
-                          'color': '#fff',
+                          'font-size': '16px',
+                          'color': 'white',
                       })
                       // 当处于还未出现歌词的时候，列表的移动距离为0，处于歌词界面的中间
                       $('.song-words-list').css('transform','translateY(0)')
@@ -313,9 +298,6 @@
                     }
                     if (status) {
                       // console.log('ts', nowWords)
-                      // 设置歌词区域的歌词
-                      // $('.lrcContainer').text(nowWords)
-
                       var transformHeight = $('.audio')[0].transformHeight
                       songWordShift(words, oldIndex, nowIndex, transformHeight)
                     }
@@ -334,33 +316,13 @@
                     var currentDuration = $('.audio')[0].duration
                     var ratio = updatetime / currentDuration
                     var lineWidth = targetLength * ratio
+
                     // 进度条根据
                     $('.line').css('width', lineWidth)
                     $('.indexCircle').css('left', `${lineWidth - 5}px`)
                 })
             }
 
-            // 歌词上移
-            var songWordShift = function(words, oldIndex, index, transformHeight) {
-            var oldWord = words[oldIndex]
-            var currentWord = words[index]
-            // ul列表移动的像素，为单行高度的倍数，每更新一次歌词时，移动行高像素
-            var changeLineHeight = transformHeight * index
-            // console.log('changeLineHeight',changeLineHeight);
-            $('.song-words-list').css('transform',`translateY(-${changeLineHeight}px)`)
-            // if (index >= 1) {
-            //   // 设置播放后的歌曲的样式，
-            //   $(oldWord).css({
-            //     'font-size': '14px',
-            //     'color': '#fff',
-            //   })
-            // }
-            // 当前播放个取得样式
-            $(currentWord).css({
-              'font-size': '16px',
-              'color': 'orange',
-            })
-          }
 
             // 当点击播放列表以外的部分，关闭歌曲列表
             var bindlistoff = function() {
@@ -410,6 +372,61 @@
                 bindskinClick()
             }
 
+            //   hmAndGeCiObject = {
+            //     '蔡健雅 - 被驯服的象.mp3' : hmAndGeCi1,
+            //   '苏醒 - 晚安亲爱的.mp3' : hmAndGeCi2,
+            // }
+            // 转换时间
+            var hmAndGeCiTransferHm = function(key) {
+              // hmAndGeCi为key为时间（毫秒），value为对应的歌词的对象
+                var hmAndGeCi = hmAndGeCiObject[key]
+                  // console.log('hmAndGeCi', hmAndGeCi);
+                // hmArray是一个数组，用于存放hmAndGeCi中的时间 [2230, 3340, 7770]这样的
+                var hmArray = Object.keys(hmAndGeCi).map(function(e){
+                  // console.log(e)
+                  return Number(e)
+              })
+              // console.log('hmArray', hmArray);
+              return hmArray
+            }
+            // 添加歌词
+            var addMusicLrc = function(key) {
+              // 获取存放歌词的元素
+              var lrcContainer = $('.song-words-list')
+              // hmAndGeCi为key为时间（毫秒），value为对应的歌词的对象
+              var hmAndGeCi = hmAndGeCiObject[key]
+              // hmArray存放歌曲 歌词时间的数组
+              var hmArray = hmAndGeCiTransferHm(key)
+                // console.log('hmArray', hmArray);
+              // 定义一个空字符串用以存放歌词
+              var res = ''
+              for (var i = 0; i < hmArray.length; i++) {
+                // 遍历添加歌词到tres中
+                  res += `<li class="li-song-word">${hmAndGeCi[hmArray[i]]}</li>`
+              }
+              // console.log('res', res)
+              lrcContainer.append(res)
+              //得到一个有由每句歌词组成的数组
+              var words = $('.li-song-word')
+              // console.log('words', words);
+              return words
+            }
+
+            // 歌词上移
+            var songWordShift = function(words, oldIndex, index, transformHeight) {
+            var oldWord = words[oldIndex]
+            var currentWord = words[index]
+            // ul列表移动的像素，为单行高度的倍数，每更新一次歌词时，移动行高像素
+            var changeLineHeight = transformHeight * index
+            // console.log('changeLineHeight',changeLineHeight);
+            $('.song-words-list').css('transform',`translateY(-${changeLineHeight}px)`)
+            // 当前播放个取得样式
+            $(currentWord).css({
+              'font-size': '16px',
+              'color': 'orange',
+            })
+          }
+
             // 给play绑定click事件,同时将播放页面的歌曲名称改为当前播放歌曲
             var play = function(offset) {
                     var numberOfMusics = musicList.length
@@ -419,12 +436,14 @@
                     console.log('i', i);
                     // 将i的值赋值给index，data-index="i"
                     $('.audio').data('index', i)
-                    $('audio').attr('src', `music/${musicList[i]}`)
+                    $('.audio').attr('src', `music/${musicList[i]}`)
                     // 切换当前播放的图片
                     $('.currentImg').attr('src', `image/${imagesList[i]}`)
 
                     //当点击上下曲时，class为music-content的元素text设当前歌曲名字
                     switchNameOfMusic(i)
+                    // 切换歌曲之前，先把上一首歌的歌词清除
+                    $('.song-words-list').text('')
             }
 
             // 点击歌曲播放列表里面的歌曲，切换页面歌曲名称为当前歌曲名称
@@ -480,6 +499,8 @@
                     $('.audio')[0].play()
                     //首先取消动画效果，canplay状态下添加动画
                     cancelRotate()
+                    // 清空上一首歌曲歌词
+                    $('.song-words-list').text('')
                 } else if (m === 1) {
                     random()
                     $('.audio')[0].play()
@@ -498,11 +519,15 @@
 
                     //首先取消动画效果，canplay状态下添加动画
                     cancelRotate()
+                    // 清空上一首歌曲歌词
+                    $('.song-words-list').text('')
                 } else {
                     single()
                     $('.audio')[0].play()
                     //首先取消动画效果，canplay状态下添加动画
                     cancelRotate()
+                    // 清空上一首歌曲歌词
+                    $('.song-words-list').text('')
                 }
             }
 
@@ -517,7 +542,7 @@
             var random = function() {
                 var r = Math.floor(Math.random() * musicList.length)
                 $('.audio').attr('src', `music/${musicList[r]}`)
-                $('.audio').attr('data-index', r)
+                $('.audio').data('index', r)
                 $('.currentImg').attr('src', `image/${imagesList[r]}`)
             }
 

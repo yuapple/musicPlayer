@@ -59,29 +59,31 @@
         top: 7%;
         left: 55%;
         color: white;
-        font-style: normal;;
+        font-style: normal;
         font-size: large;
       /*outline: 1px solid white;*/
     }
     .lrc-containner {
       position: absolute;
       top: 35%;
-      left: 55%;
-      width: 35%;
+      left: 57%;
+      width: 25%;
       height: 65%;
-      font-size: 20px;
+      font-size: 16px;
       line-height: 30px;
       overflow: hidden;
-      outline: 2px solid pink;
+      /*outline: 2px solid pink;*/
     }
     .song-words-list {
       position: absolute;
-      text-align: center;
-      padding-left: 0;
-      top: 50%;
-      font-size: 14px;
+      width: 100%;
+      top: 39%;
       list-style-type: none;
       transition: all 0.5s linear;
+      padding-left: 0px;
+    }
+    .li-song-word {
+      text-align: center;
     }
     .cut-ofRule {
         position: relative;
