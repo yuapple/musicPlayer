@@ -216,7 +216,6 @@
                     `
                     console.log('d', d);
                     $('.duration').text(d)
-
                     // 判断当前的播放状态，如果是播放状态下，添图片的动画效果。
                     var isPaused = $('.audio').prop('paused')
                     if (isPaused === false) {
@@ -229,8 +228,6 @@
             var bindSliderInput = function() {
                 $('.invisibleSlider').on('input', function(event) {
                     var target = $(event.target)
-                    // width: 500px;
-                    // targetWidth = '500px'
                     var targetWidth = target.css('width')
                     var targetLength = Number(targetWidth.slice(0, targetWidth.length - 2))
                     var max = target.attr('max')
@@ -323,7 +320,6 @@
                 })
             }
 
-
             // 当点击播放列表以外的部分，关闭歌曲列表
             var bindlistoff = function() {
                 $('.music-content').on('click', function() {
@@ -333,8 +329,9 @@
                     }
                 })
             }
+
+            // 给换肤标志添加click事件
             var bindskinClick = function() {
-              // 给换肤标志添加click事件
               $('.skinchange').on('click', function() {
               var lengthOfskinList = skinList.length
               // 得到当前皮肤的index
@@ -413,11 +410,11 @@
             }
 
             // 歌词上移
-            var songWordShift = function(words, oldIndex, index, transformHeight) {
+            var songWordShift = function(words, oldIndex, nowIndex, transformHeight) {
             var oldWord = words[oldIndex]
-            var currentWord = words[index]
+            var currentWord = words[nowIndex]
             // ul列表移动的像素，为单行高度的倍数，每更新一次歌词时，移动行高像素
-            var changeLineHeight = transformHeight * index
+            var changeLineHeight = transformHeight * nowIndex
             // console.log('changeLineHeight',changeLineHeight);
             $('.song-words-list').css('transform',`translateY(-${changeLineHeight}px)`)
             // 当前播放个取得样式
@@ -594,6 +591,7 @@
               $('.currentImgDiv').css('-webkit-animation','rotate 13s linear infinite')
               $('.currentImgDiv').css('-moz-animation','rotate 13s linear nfinite')
             }
+            // 取消CSS中的animation属性
             var cancelRotate = function() {
               $('.currentImgDiv').css('animation','none')
               $('.currentImgDiv').css('-webkit-animation','none')
