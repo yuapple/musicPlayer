@@ -148,15 +148,20 @@
                 $('ul').on('click', function() {
                     var target = $(event.target)
                     if (target.hasClass('li-song')) {
+                        // target.css('font-size', '4.9em')
                         var index = target.data('index')
                         $('audio').attr('src',`music/${musicList[index]}`)
                         $('audio').attr('data-index', index)
                         $('audio')[0].play()
+                        // 设置当前播放歌曲的index为被点击歌曲的index
+                        $('.audio').data('index', index)
                         $('.pause1').css('display', 'none')
                         $('.pause2').css('display', 'inline-block')
                         $('.pause3').css('display', 'inline-block')
                         // 给播放进度标示添加光晕
                         $('.indexCircle').css('box-shadow', '0 0 55px #f00')
+                        // 更改播放歌曲名称
+                        switchNameOfMusic(index)
                     }
                 })
             }
@@ -279,6 +284,8 @@
                         ${ms}
                     `
                     $('.currentMusic').text(m)
+                    //当点击上下曲时，class为music-content的元素text设当前歌曲名字
+                    switchNameOfMusic(i)
             }
 
             // 判断当前的播放状态，如果是播放状态，将状态图标改为播放,用于上一曲下一曲播放时的判断
@@ -363,6 +370,17 @@
                 var t = `${minutes}:${seconds}`
                 return t
             }
+            // 点击歌曲播放列表里面的歌曲，切换页面歌曲名称为当前歌曲名称
+            var switchNameOfMusic = function(i) {
+              //当点击上下曲时，class为music-content的元素text设当前歌曲名字
+              var ms = musicList[i].slice(0, musicList[i].length - 4)
+              console.log('ms', ms);
+              var m = `
+                  ${ms}
+              `
+              $('.currentMusic').text(m)
+            }
+
 
             // 页面加载时，music-content元素的text为当前歌曲名字，并添加列表的名称
             var load = function() {
